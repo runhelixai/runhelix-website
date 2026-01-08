@@ -86,7 +86,6 @@ body,
   -webkit-overflow-scrolling: touch; /* smooth native momentum where applicable */
 }
 
-/* Hardware-accelerate heavy elements to reduce jank during transform-based scrolling */
 img,
 video,
 .container-md,
