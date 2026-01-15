@@ -12,6 +12,10 @@ import Prompttooutput from "./PromptToOutput";
 import Ugcads from "./ugcads";
 import Helixblogs from "./helixblogs";
 import AiUgc from "./aiUgc";
+import AdsCurrently from "./adsCurrently";
+import SimpleInterface from "./simpleInterface";
+import UgcTestimonial from "./ugcTestimonial";
+import MarketingSection from "./marketingSection";
 
 export default function HomePage() {
   useEffect(() => {
@@ -38,11 +42,15 @@ export default function HomePage() {
   return (
     <div>
       <Herobanner />
-      <AiGeneratedProduct />
-      <IndustriesServiced />
+      <AdsCurrently />
+      <SimpleInterface />
+      {/* <AiGeneratedProduct /> */}
+      {/* <IndustriesServiced /> */}
       <Prompttooutput />
-      <GalleryView />
-      <AiUgc />
+      {/* <GalleryView /> */}
+      <UgcTestimonial />
+      <MarketingSection />
+      {/* <AiUgc /> */}
       <VideoGenerated />
 
       {/* <ProductDataTable /> */}

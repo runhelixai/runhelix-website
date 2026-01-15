@@ -92,3 +92,9 @@ video,
 .container-lg {
   will-change: transform, opacity;
 }
+
+.container-lg-change {
+  max-width: 1636px;
+  margin: 0 auto;
+  padding: 0 20px;
+}

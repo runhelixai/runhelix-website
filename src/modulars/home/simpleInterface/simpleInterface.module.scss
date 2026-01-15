@@ -1,0 +1,50 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.simpleInterface {
+    padding: 60px 0;
+
+    h3 {
+        color: var(--Black, #515151);
+        text-align: center;
+        font-size: 50px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0 0 20px 0;
+
+        @include respond-to("sm") {
+            font-size: 24px;
+            line-height: 36px;
+        }
+    }
+
+    h4 {
+        color: var(--Black, #515151);
+        text-align: center;
+        margin: 0 0 20px 0;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+
+        @include respond-to("sm") {
+            font-size: 18px;
+            line-height: 24px;
+        }
+    }
+
+    p {
+        color: var(--Black, #515151);
+        text-align: center;
+        font-size: 20px;
+        line-height: 32px;
+        font-style: normal;
+        font-weight: 400;
+
+        @include respond-to("sm") {
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+}

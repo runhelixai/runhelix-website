@@ -1,0 +1,61 @@
+@use '../../../scss/main.scss' as *;
+@use '../../../scss/breakpoints/breakpoints.scss' as *;
+
+.marketingSection {
+    padding: 100px 64px;
+    background: #000;
+    margin: 0 0 100px 0;
+
+    @include respond-to("md") {
+        padding: 100px 20px;
+        margin: 0 0 60px 0;
+    }
+
+    @include respond-to("sm") {
+        padding: 60px 20px;
+    }
+
+    .centerAlignment {
+        max-width: 1400px;
+        margin: 0 auto;
+
+        .grid {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 40px;
+
+            h2 {
+                color: #fff;
+                font-size: 30px;
+                font-weight: 500;
+                margin: 0 0 30px 0;
+
+                span {
+                    font-size: 50px;
+                    display: block;
+                    line-height: normal;
+                }
+            }
+
+            p {
+                color: #9F9F9F;
+                font-size: 26px;
+                margin: 0 0 30px 0;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+            }
+
+            button {
+                background: #2D2D2D;
+                border: 1px solid #585858;
+                padding: 12px 30px;
+                font-size: 18px;
+                color: #fff;
+                border-radius: 99px;
+                cursor: pointer;
+                font-weight: 500;
+            }
+        }
+    }
+}
