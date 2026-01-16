@@ -2,14 +2,14 @@
 @use '../../../scss/breakpoints/breakpoints.scss' as *;
 
 .ugcTestimonial {
-    padding: 0 54px 100px 54px;
+    padding: 0 0 100px 0;
 
     @include respond-to("md") {
-        padding: 0 20px 100px 20px;
+        padding: 0 0 100px 0;
     }
 
     @include respond-to("sm") {
-        padding: 0 20px 20px 20px;
+        padding: 0 0 20px 0;
     }
 
     h2 {
@@ -28,14 +28,73 @@
         }
     }
 
+    .videoGrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        align-items: center;
+        padding: 0 0 90px 0;
+
+        @include respond-to("md") {
+            padding: 0 0 60px 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @include respond-to("sm") {
+            gap: 16px;
+            padding: 0 0 30px 0;
+        }
+
+        .items {
+            border-radius: 12px;
+            position: relative;
+
+            .onlyImage {
+                border-radius: 12px;
+                width: 100%;
+                height: 533px;
+                display: block;
+
+                img {
+                    border-radius: 12px;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    display: block;
+                }
+            }
+
+            .frame {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                img {
+                    border-radius: 12px;
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                }
+            }
+
+            video {
+                display: block;
+                height: 100%;
+                width: 100%;
+                border-radius: 12px;
+            }
+        }
+    }
+
     .grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 40px;
+        gap: 20px;
         align-items: center;
         padding: 0 0 90px 0;
-        max-width: 1400px;
-        margin: 0 auto;
 
         @include respond-to("md") {
             padding: 0 0 60px 0;
@@ -68,9 +127,10 @@
 
         .items {
             img {
-                display: block;
-                width: 100%;
                 border-radius: 12px;
+                width: 100%;
+                height: 100%;
+                display: block;
             }
         }
     }

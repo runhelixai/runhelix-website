@@ -295,37 +295,41 @@ export default function SimplePricing() {
           <div className={styles.pricingbottommain}>
             <div className={styles.pricingbottom}>
               <div className={styles.pricingbottomtopbox}>
-                <h6>Enterprise Integration</h6>
+                <h6>Agency Integration</h6>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>High-volume Video Throughput Tier</span>
+                  <span>White Labeling- Branded with Your Interface
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span> White Labeling- Branded with Your Interfaces</span>
+                  <span> API & Custom Integrations- Workflow Tools, Cloud, CRM, DAM, Social,
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>API & Custom Integrations- Social, Cloud, DAM, CRM, Workflow
-                    Tools</span>
+                  <span>Highest Video & Image Volume Tiers
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>99.5% uptime SLA and priority support, full analytics &
-                    reporting dashboard</span>
+                  <span>Custom Model Tuning
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Dedicated Account & Technical Support Managers</span>
+                  <span>99.5% Uptime SLA and Priority Support, Full analytics & reporting dashboard
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>$4,999 Set-up Fee + Integrations Custom Model Tuning & Content
-                    Tiers</span>
+                  <span>Dedicated Account & Technical Support Management
+                  </span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Contact for Custom Configuration Plan</span>
+                  <span>Contact for Custom Configuration Plan
+                  </span>
                 </div>
                 {/* <a href="https://platform.runhelix.ai/auth" target="_blank"> */}
                 <button type="button" className={styles.contactbtn}>
