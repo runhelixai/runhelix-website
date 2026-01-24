@@ -10,7 +10,10 @@ const montserrat = Montserrat({
 
 export const metadata = {
   title: "Helix",
-  description: "Helix-The DNA of Consumer Technology Product Storytelling",
+  description: "The DNA of Product Storytelling",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {

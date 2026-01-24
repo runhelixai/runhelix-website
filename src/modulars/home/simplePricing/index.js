@@ -44,7 +44,7 @@ export default function SimplePricing() {
     fetchPlans();
   }, []);
 
-  const filteredPlans = plans.filter((plan) => plan.type === billingCycle);
+  const filteredPlans = plans.filter((plan) => plan.type === billingCycle && !plan.name.toLowerCase().includes("top up"));
 
   // Helper to render the specific static body content based on plan name
   const renderCardBody = (planName) => {

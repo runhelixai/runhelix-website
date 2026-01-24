@@ -39,10 +39,11 @@ export default function HomePage() {
     <div>
       <Herobanner />
       <AiGeneratedProduct />
-      <IndustriesServiced />
+      <AiUgc />
       <Prompttooutput />
       <GalleryView />
-      <AiUgc />
+      <IndustriesServiced />
+      {/* <AiUgc /> */}
       <VideoGenerated />
 
       {/* <ProductDataTable /> */}

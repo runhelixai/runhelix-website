@@ -84,7 +84,7 @@ export default function AiGeneratedProduct() {
                 <div className={styles.iconText}>
                   <img src={SoraIcon} alt="SoraIcon" />
                   <span>
-                    Sora 2 pro
+                    Sora
                   </span>
                 </div>
                 <div className={styles.iconText}>

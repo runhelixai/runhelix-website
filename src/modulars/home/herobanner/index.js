@@ -33,7 +33,7 @@ export default function Herobanner() {
                   <div className={styles.centerLogo}>
                     <img src={HelixImage} alt="HelixImage" />
                   </div>
-                  <p>The DNA of Consumer Technology Product Storytelling</p>
+                  <p>The DNA of Product Storytelling</p>
                 </div>
               </div>
             </div>

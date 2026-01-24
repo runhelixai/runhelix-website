@@ -2,8 +2,29 @@
 @use '../../../scss/breakpoints/breakpoints.scss' as *;
 
 .aiugc {
-    padding: 60px 0;
+    padding: 100px 0 60px 0;
     position: relative;
+
+    @include respond-to("sm") {
+        padding: 20px 0 40px 0;
+    }
+
+    .bottomvec {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+
+        img {
+            display: block;
+            opacity: .5;
+            width: 100%;
+
+            @include respond-to("sm") {
+                opacity: 1;
+            }
+        }
+    }
 
     .topvec {
         position: absolute;
@@ -11,9 +32,56 @@
         left: 0;
         z-index: -1;
 
+        img[alt="Topvec"] {
+            @include respond-to("sm") {
+                display: none;
+            }
+        }
+
+        img[alt="TopvecMobile"] {
+            display: none;
+
+            @include respond-to("sm") {
+                display: block;
+            }
+        }
+
         img {
             display: block;
             width: 100%;
+            object-position: top;
+            opacity: .5;
+            object-fit: cover;
+
+            @include respond-to("sm") {
+                opacity: 1;
+            }
+        }
+    }
+
+    .iconCenterAll {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+
+        img {
+            display: block;
+            max-width: 38px;
+        }
+    }
+
+    .postText {
+        color: #515151;
+        text-align: center;
+        font-size: 18px;
+        margin: 30px 0 10px 0;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+
+        @include respond-to("sm") {
+            margin: 20px 0 10px 0;
+            font-size: 16px;
         }
     }
 
@@ -71,6 +139,15 @@
             bottom: 20px;
         }
 
+        @include respond-to("sm") {
+            bottom: 0;
+            position: inherit;
+            right: 0;
+            justify-content: flex-end;
+            padding-right: 20px;
+            padding-top: 30px;
+        }
+
         span {
             color: var(--Black, #515151);
             font-size: 24px;
@@ -98,7 +175,8 @@
     .twovideo {
         display: flex;
         padding: 0 8%;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 100px;
         position: relative;
 
         @include respond-to("md") {

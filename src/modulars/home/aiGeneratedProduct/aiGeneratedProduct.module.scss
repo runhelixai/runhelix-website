@@ -2,16 +2,16 @@
 @use "../../../scss/breakpoints/breakpoints.scss" as *;
 
 .herobannermain {
-  padding: 120px 0;
+  padding: 90px 0 120px 0;
   background-image: url('/assets/images/bg-primary.png');
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: bottom;
   width: 100%;
 
   @include respond-to("sm") {
     height: auto;
-    padding: 0 0 40px 0;
+    padding: 60px 20px 60px 20px;
   }
 
 
@@ -159,13 +159,13 @@
       font-size: 40px;
       font-style: normal;
       font-weight: 700;
-      margin: 0 0 20px 0;
+      margin: 0 0 60px 0;
       line-height: normal;
 
       @include respond-to("sm") {
         font-size: 24px;
         line-height: 34px;
-        margin: 0 0 14px 0;
+        margin: 0 0 30px 0;
       }
     }
 
@@ -176,13 +176,19 @@
       max-width: 1300px;
       font-style: normal;
       font-weight: 400;
-      margin: 0 auto 40px auto;
+      margin: 0 auto 60px auto;
       line-height: normal;
 
       @include respond-to("sm") {
         font-size: 16px;
         margin: 0 auto 20px auto;
         line-height: 24px;
+      }
+
+      br {
+        @include respond-to("sm") {
+          display: none;
+        }
       }
     }
 
@@ -191,13 +197,14 @@
       text-align: center;
       font-size: 22px;
       font-style: normal;
-      margin: 0 0 20px 0;
+      margin: 0 0 60px 0;
       font-weight: 500;
       line-height: normal;
 
       @include respond-to("sm") {
         font-size: 16px;
         line-height: 24px;
+        margin: 0 0 30px 0;
       }
     }
 
@@ -221,14 +228,13 @@
     align-items: center;
     justify-content: center;
     gap: 60px;
-    padding: 60px 0 0 0;
+    padding: 30px 0 0 0;
 
     @include respond-to("sm") {
       padding: 40px 0 0 0;
       overflow: auto;
+      flex-wrap: wrap;
       gap: 20px;
-      scrollbar-width: none;
-      justify-content: flex-start;
     }
 
     .iconText {

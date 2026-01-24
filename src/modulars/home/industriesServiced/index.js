@@ -8,25 +8,34 @@ import styles from "./industriesServiced.module.scss";
 const changerimg1 = "/assets/images/25.jpeg";
 const changerimg2 = "/assets/images/26.jpg";
 const changerimg3 = "/assets/images/19.png";
-const changerimg4 = "/assets/images/17.jpg";
+const changerimg4 = "/assets/images/15.png";
 const changerimg5 = "/assets/images/23.png";
 const changerimg6 = "/assets/images/16.png";
 const changerimg7 = "/assets/images/5.jpg";
 const changerimg8 = "/assets/images/9.jpg";
 const changerimg9 = "/assets/images/23.png";
 const changerimg10 = "/assets/images/4.png";
+const changerimg11 = "/assets/images/Food.jpg";
+const changerimg12 = "/assets/images/1.png";
+const changerimg13 = "/assets/images/4.jpg";
+const changerimg14 = "/assets/images/kids.jpg";
+const changerimg15 = "/assets/images/pets.png";
+const Skincare = "/assets/images/Skincare.jpg";
+const Decor = "/assets/images/Decor.jpg";
+const Fashion = "/assets/images/Fashion.jpg";
+const Productivity = "/assets/images/Productivity.jpg";
 
 const industries = [
-  { label: "Smart Home Tech", image: changerimg6 },
-  { label: "Mobility & Vehicle Tech", image: changerimg1 },
-  { label: "Smart Apparel & Fashion Tech", image: changerimg2 },
-  { label: "Food & Beverage Tech", image: changerimg3 },
-  { label: "Productivity & Workspace Tech", image: changerimg4 },
-  { label: "Security & Surveillance Tech", image: changerimg5 },
+  { label: "Beauty & Skincare", image: Skincare },
+  { label: "Fashion Apparel & Accessories", image: Fashion },
+  { label: "Food, Beverage & Supplements", image: changerimg11 },
   { label: "Health & Wellness Tech", image: changerimg7 },
-  { label: "Beauty & AI Skincare Tech", image: changerimg8 },
-  { label: "IoT & Connected Tech", image: changerimg9 },
-  { label: "Connected Camera & Video Tech", image: changerimg10 },
+  { label: "Home Decor & Lifestyle Goods", image: Decor },
+  { label: "Smart Home Devices", image: changerimg6 },
+  { label: "Productivity & Workspace Tech", image: Productivity },
+  { label: "Pets & Companion Products", image: changerimg15 },
+  { label: "Travel & Luggage", image: changerimg12 },
+  { label: "Kids, Baby & Family Products", image: changerimg14 },
 ];
 
 export default function IndustriesServiced() {
@@ -45,7 +54,7 @@ export default function IndustriesServiced() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          <h2>Consumer Technology Industries Serviced</h2>
+          <h2> Industries Serviced</h2>
           <p>
             Instantly Create Stunning AI-Generated Product Videos & Images For
             Your:
