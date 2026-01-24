@@ -4,17 +4,116 @@ import { createClient } from "@supabase/supabase-js";
 import styles from "./simplePricing.module.scss";
 
 const CheckIcon = '/assets/icons/check-icon.svg';
+const InfoIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 16v-4" />
+    <path d="M12 8h.01" />
+  </svg>
+);
+
+const Check = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+);
+
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-console.log("Supabase Config Debug:", {
-  urlExists: !!supabaseUrl,
-  keyExists: !!supabaseAnonKey,
-  url: supabaseUrl, // CAUTION: Review this log in production console!
-});
-
 const supabase = (supabaseUrl && supabaseAnonKey) ? createClient(supabaseUrl, supabaseAnonKey) : null;
+
+const CreditUsageTooltip = ({ type, tier, monthlyPrice, videoCount, imageCount }) => {
+  return (
+    <div className={styles.infoIcon}>
+      <InfoIcon style={{ width: 14, height: 14 }} />
+      <div className={styles.tooltipContent}>
+        <div className={styles.tooltipTitle}>
+          <InfoIcon />
+          <span>{type === "video" ? "Video Generation Math" : "Image Generation Math"}</span>
+        </div>
+
+        {type === "video" && (
+          <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
+            <div className={styles.label}>
+              Cost per Video
+              <small>(:12s Sora 2)</small>
+            </div>
+            <div className={`${styles.value} ${styles.highlight}`}>10 Credits</div>
+          </div>
+        )}
+
+        {type === "image" && (
+          <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
+            <div className={styles.label}>
+              Cost per Image
+              <small>(Gemini 2.5)</small>
+            </div>
+            <div className={`${styles.value} ${styles.highlight}`}>1 Credit</div>
+          </div>
+        )}
+
+        <div className={styles.tooltipRow}>
+          <div className={styles.label} style={{ fontWeight: "bold", textTransform: "uppercase", fontSize: "10px", color: "#64748b" }}>
+            {tier} Plan Capacity
+          </div>
+        </div>
+
+        {type === "video" && (
+          <div style={{ background: "rgba(0,0,0,0.03)", padding: "12px", borderRadius: "8px" }}>
+            <div className={styles.tooltipRow}>
+              <div className={styles.label}>Total Credits</div>
+              <div className={`${styles.value} ${styles.highlight}`}>{videoCount * 10} Credits</div>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.tooltipRow}>
+              <div className={styles.label} style={{ color: "#64748b" }}>Total Videos</div>
+              <div className={styles.value}>{videoCount}</div>
+            </div>
+          </div>
+        )}
+
+        {type === "image" && (
+          <div style={{ background: "rgba(0,0,0,0.03)", padding: "12px", borderRadius: "8px" }}>
+            <div className={styles.tooltipRow}>
+              <div className={styles.label}>Total Credits</div>
+              <div className={`${styles.value} ${styles.highlight}`}>{imageCount * 1} Credits</div>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.tooltipRow}>
+              <div className={styles.label} style={{ color: "#64748b" }}>Total Images</div>
+              <div className={styles.value}>{imageCount}</div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 
 export default function SimplePricing() {
   const [billingCycle, setBillingCycle] = useState("monthly");
@@ -22,22 +121,13 @@ export default function SimplePricing() {
 
   useEffect(() => {
     async function fetchPlans() {
-      console.log("Fetching plans... Supabase client exists:", !!supabase);
-      if (!supabase) {
-        console.error("Supabase client is null. Check env vars.");
-        return;
-      }
+      if (!supabase) return;
       const { data, error } = await supabase
         .from("plan")
         .select("*")
         .order("price", { ascending: true });
 
-      if (error) {
-        console.error("Error fetching plans:", error);
-      }
-
       if (data) {
-        console.log("Plans fetched successfully:", data);
         setPlans(data);
       }
     }
@@ -46,44 +136,75 @@ export default function SimplePricing() {
 
   const filteredPlans = plans.filter((plan) => plan.type === billingCycle && !plan.name.toLowerCase().includes("top up"));
 
-  // Helper to render the specific static body content based on plan name
-  const renderCardBody = (planName) => {
-    const name = planName.toLowerCase();
+  const renderCardBody = (plan) => {
+    const name = plan.name.toLowerCase();
+    const periodLabel = billingCycle === 'yearly' ? '/ year' : '/ month';
+
+    // Default credits if DB value missing
+    let safeCredits = plan.tokens;
+    if (!safeCredits) {
+      if (name.includes("agency")) safeCredits = 4500;
+      else if (name.includes("scale")) safeCredits = 1500;
+      else safeCredits = 300;
+    }
+
+    const videoCount = Math.floor(safeCredits / 10);
+    const imageCount = safeCredits;
+    const monthlyPriceStr = `$${Math.round(plan.price)}`; // Approximate for display in tooltip if needed
+
     if (name.includes("start")) {
       return (
         <div className={styles.cardBody}>
           <ul className={styles.featuresList}>
+            <li>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <div className={styles.infoIcon}>
+                  <InfoIcon style={{ width: 14, height: 14 }} />
+                  <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
+                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                  </div>
+                </div>
+              </div>
+            </li>
             <li className={styles.highlight}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 30 videos/ month <span><small>(:12 second video)</small></span></span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {videoCount} videos{periodLabel} <span><small>(:12 second video)</small></span></span>
+                <CreditUsageTooltip
+                  type="video"
+                  tier="Start"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 300 Free Images</span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {imageCount} Free Images</span>
+                <CreditUsageTooltip
+                  type="image"
+                  tier="Start"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <InfoIcon style={{ color: '#29a6b4' }} />
               <span>Ideal for founders, solo operators, early launches</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 11.08V12A10 10 0 1 1 11.7259 2.08" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>No contracts. Cancel <br /> anytime.</span>
+              <Check style={{ color: '#29a6b4' }} />
+              <span>No contracts. Cancel anytime.</span>
             </li>
           </ul>
 
@@ -108,36 +229,54 @@ export default function SimplePricing() {
       return (
         <div className={styles.cardBody}>
           <ul className={styles.featuresList}>
+            <li>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <div className={styles.infoIcon}>
+                  <InfoIcon style={{ width: 14, height: 14 }} />
+                  <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
+                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                  </div>
+                </div>
+              </div>
+            </li>
             <li className={styles.highlight}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 150 videos/ month <span><small>(:12 second video)</small></span></span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {videoCount} videos{periodLabel} <span><small>(:12 second video)</small></span></span>
+                <CreditUsageTooltip
+                  type="video"
+                  tier="Scale"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 1500 Free Images</span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {imageCount} Free Images</span>
+                <CreditUsageTooltip
+                  type="image"
+                  tier="Scale"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <InfoIcon style={{ color: '#29a6b4' }} />
               <span>Built for scaling DTC brands and product teams</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 11.08V12A10 10 0 1 1 11.7259 2.08" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Check style={{ color: '#29a6b4' }} />
               <span>Consistent daily content across social & ads</span>
             </li>
           </ul>
@@ -163,36 +302,54 @@ export default function SimplePricing() {
       return (
         <div className={styles.cardBody}>
           <ul className={styles.featuresList}>
+            <li>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <div className={styles.infoIcon}>
+                  <InfoIcon style={{ width: 14, height: 14 }} />
+                  <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
+                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                  </div>
+                </div>
+              </div>
+            </li>
             <li className={styles.highlight}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 450 videos/ month <span><small>(:12 second video)</small></span></span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {videoCount} videos{periodLabel} <span><small>(:12 second video)</small></span></span>
+                <CreditUsageTooltip
+                  type="video"
+                  tier="Agency"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Up to 4500 Free Images</span>
+              <Check style={{ color: '#29a6b4' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span>Up to {imageCount} Free Images</span>
+                <CreditUsageTooltip
+                  type="image"
+                  tier="Agency"
+                  monthlyPrice={monthlyPriceStr}
+                  videoCount={videoCount}
+                  imageCount={imageCount}
+                />
+              </div>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
-                <path d="M12 16V12M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <InfoIcon style={{ color: '#29a6b4' }} />
               <span>Designed for agencies & in-house brand teams</span>
             </li>
             <li>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 11.08V12A10 10 0 1 1 11.7259 2.08" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <Check style={{ color: '#29a6b4' }} />
               <span>Serve multiple clients without adding headcount</span>
             </li>
           </ul>
@@ -235,14 +392,14 @@ export default function SimplePricing() {
               <div
                 className={`${styles.togglechileft} ${billingCycle === 'monthly' ? styles.active : ''}`}
                 onClick={() => setBillingCycle('monthly')}
-                style={{ cursor: 'pointer', background: billingCycle === 'monthly' ? '#29a6b4' : 'transparent', color: billingCycle === 'monthly' ? '#fff' : 'inherit' }}
+                style={{ cursor: 'pointer', background: billingCycle === 'monthly' ? 'linear-gradient(90deg, #29a6b4 0%, #9ed2c3 100%)' : 'transparent', color: billingCycle === 'monthly' ? '#fff' : 'inherit', boxShadow: billingCycle === 'monthly' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none' }}
               >
                 <p>Monthly Billing</p>
               </div>
               <div
                 className={`${styles.togglechiright} ${billingCycle === 'yearly' ? styles.active : ''}`}
                 onClick={() => setBillingCycle('yearly')}
-                style={{ cursor: 'pointer', background: billingCycle === 'yearly' ? '#29a6b4' : 'transparent', color: billingCycle === 'yearly' ? '#fff' : 'inherit' }}
+                style={{ cursor: 'pointer', background: billingCycle === 'yearly' ? 'linear-gradient(90deg, #29a6b4 0%, #9ed2c3 100%)' : 'transparent', color: billingCycle === 'yearly' ? '#fff' : 'inherit', boxShadow: billingCycle === 'yearly' ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)' : 'none' }}
               >
                 <p>Yearly Billing</p>
                 <div className={styles.savebtn}>
@@ -280,10 +437,16 @@ export default function SimplePricing() {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  SUBSCRIBE
+                  {plan.name.toLowerCase().includes("start")
+                    ? "Get Started"
+                    : plan.name.toLowerCase().includes("scale")
+                      ? "Choose Scale"
+                      : plan.name.toLowerCase().includes("agency")
+                        ? "Choose Agency"
+                        : "Subscribe"}
                 </a>
 
-                {renderCardBody(plan.name)}
+                {renderCardBody(plan)}
               </div>
             ))}
             {/* Logic fallback if no plans loaded yet */}
@@ -295,41 +458,37 @@ export default function SimplePricing() {
           <div className={styles.pricingbottommain}>
             <div className={styles.pricingbottom}>
               <div className={styles.pricingbottomtopbox}>
-                <h6>Agency Integration</h6>
+                <h6>Enterprise Integration</h6>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>White Labeling- Branded with Your Interface
-                  </span>
+                  <span>High-volume Video Throughput Tier</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span> API & Custom Integrations- Workflow Tools, Cloud, CRM, DAM, Social,
-                  </span>
+                  <span> White Labeling- Branded with Your Interfaces</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Highest Video & Image Volume Tiers
-                  </span>
+                  <span>API & Custom Integrations- Social, Cloud, DAM, CRM, Workflow
+                    Tools</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Custom Model Tuning
-                  </span>
+                  <span>99.5% uptime SLA and priority support, full analytics &
+                    reporting dashboard</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>99.5% Uptime SLA and Priority Support, Full analytics & reporting dashboard
-                  </span>
+                  <span>Dedicated Account & Technical Support Managers</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Dedicated Account & Technical Support Management
-                  </span>
+                  <span>$4,999 Set-up Fee + Integrations Custom Model Tuning & Content
+                    Tiers</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Contact for Custom Configuration Plan
-                  </span>
+                  <span>Contact for Custom Configuration Plan</span>
                 </div>
                 {/* <a href="https://platform.runhelix.ai/auth" target="_blank"> */}
                 <button type="button" className={styles.contactbtn}>
