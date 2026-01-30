@@ -59,10 +59,9 @@ const CreditUsageTooltip = ({ type, tier, monthlyPrice, videoCount, imageCount }
         {type === "video" && (
           <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
             <div className={styles.label}>
-              Cost per Video
-              <small>(:12s Sora 2)</small>
+              Sora 2 (:12s)
             </div>
-            <div className={`${styles.value} ${styles.highlight}`}>10 Credits</div>
+            <div className={`${styles.value} ${styles.highlight}`}>10 Tokens</div>
           </div>
         )}
 
@@ -85,8 +84,8 @@ const CreditUsageTooltip = ({ type, tier, monthlyPrice, videoCount, imageCount }
         {type === "video" && (
           <div style={{ background: "rgba(0,0,0,0.03)", padding: "12px", borderRadius: "8px" }}>
             <div className={styles.tooltipRow}>
-              <div className={styles.label}>Total Credits</div>
-              <div className={`${styles.value} ${styles.highlight}`}>{videoCount * 10} Credits</div>
+              <div className={styles.label}>Total Tokens</div>
+              <div className={`${styles.value} ${styles.highlight}`}>{videoCount * 10} Tokens</div>
             </div>
             <div className={styles.divider} />
             <div className={styles.tooltipRow}>
@@ -99,8 +98,8 @@ const CreditUsageTooltip = ({ type, tier, monthlyPrice, videoCount, imageCount }
         {type === "image" && (
           <div style={{ background: "rgba(0,0,0,0.03)", padding: "12px", borderRadius: "8px" }}>
             <div className={styles.tooltipRow}>
-              <div className={styles.label}>Total Credits</div>
-              <div className={`${styles.value} ${styles.highlight}`}>{imageCount * 1} Credits</div>
+              <div className={styles.label}>Total Tokens</div>
+              <div className={`${styles.value} ${styles.highlight}`}>{imageCount * 1} Tokens</div>
             </div>
             <div className={styles.divider} />
             <div className={styles.tooltipRow}>
@@ -159,11 +158,11 @@ export default function SimplePricing() {
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Tokens {periodLabel}</span>
                 <div className={styles.infoIcon}>
                   <InfoIcon style={{ width: 14, height: 14 }} />
                   <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
-                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                    Unused Tokens don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
                   </div>
                 </div>
               </div>
@@ -181,10 +180,10 @@ export default function SimplePricing() {
                 />
               </div>
             </li>
-            <li>
+            {/* <li>
               <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
-            </li>
+            </li> */}
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -232,11 +231,11 @@ export default function SimplePricing() {
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Tokens {periodLabel}</span>
                 <div className={styles.infoIcon}>
                   <InfoIcon style={{ width: 14, height: 14 }} />
                   <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
-                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                    Unused Tokens don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
                   </div>
                 </div>
               </div>
@@ -254,10 +253,10 @@ export default function SimplePricing() {
                 />
               </div>
             </li>
-            <li>
+            {/* <li>
               <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
-            </li>
+            </li> */}
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -305,11 +304,11 @@ export default function SimplePricing() {
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Credits {periodLabel}</span>
+                <span style={{ fontWeight: '600' }}>{safeCredits.toLocaleString()} Tokens {periodLabel}</span>
                 <div className={styles.infoIcon}>
                   <InfoIcon style={{ width: 14, height: 14 }} />
                   <div className={styles.tooltipContent} style={{ width: 'max-content', maxWidth: '250px' }}>
-                    Unused credits don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
+                    Unused Tokens don't roll over to the next {billingCycle === 'yearly' ? 'year' : 'month'}
                   </div>
                 </div>
               </div>
@@ -327,10 +326,10 @@ export default function SimplePricing() {
                 />
               </div>
             </li>
-            <li>
+            {/* <li>
               <Check style={{ color: '#29a6b4' }} />
               <span>:12, :24, :48 second video options</span>
-            </li>
+            </li> */}
             <li>
               <Check style={{ color: '#29a6b4' }} />
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -458,33 +457,35 @@ export default function SimplePricing() {
           <div className={styles.pricingbottommain}>
             <div className={styles.pricingbottom}>
               <div className={styles.pricingbottomtopbox}>
-                <h6>Enterprise Integration</h6>
+                <h6>Agency- Integration</h6>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>High-volume Video Throughput Tier</span>
+                  <span>White Labeling- Branded with Your Interface</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span> White Labeling- Branded with Your Interfaces</span>
+                  <span> API & Custom Integrations- Workflow Tools, Cloud, CRM, DAM, Social.</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>API & Custom Integrations- Social, Cloud, DAM, CRM, Workflow
-                    Tools</span>
+                  <span>Highest Video & Image Volume Tiers</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>99.5% uptime SLA and priority support, full analytics &
-                    reporting dashboard</span>
+                  <span>Custom Model Tuning</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
-                  <span>Dedicated Account & Technical Support Managers</span>
+                  <span>99.5% Uptime SLA and Priority Support, Full analytics & reporting dashboard</span>
                 </div>
-                <div className={styles.iconText}>
+                {/* <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
                   <span>$4,999 Set-up Fee + Integrations Custom Model Tuning & Content
                     Tiers</span>
+                </div> */}
+                <div className={styles.iconText}>
+                  <img src={CheckIcon} alt="CheckIcon" />
+                  <span>Dedicated Account & Technical Support Management</span>
                 </div>
                 <div className={styles.iconText}>
                   <img src={CheckIcon} alt="CheckIcon" />
