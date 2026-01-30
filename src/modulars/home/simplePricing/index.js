@@ -57,12 +57,20 @@ const CreditUsageTooltip = ({ type, tier, monthlyPrice, videoCount, imageCount }
         </div>
 
         {type === "video" && (
-          <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
-            <div className={styles.label}>
-              Sora 2 (:12s)
+          <>
+            <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
+              <div className={styles.label}>
+                Sora 2 (:12s)
+              </div>
+              <div className={`${styles.value} ${styles.highlight}`}>10 Tokens</div>
             </div>
-            <div className={`${styles.value} ${styles.highlight}`}>10 Tokens</div>
-          </div>
+            <div className={`${styles.tooltipRow} ${styles.bgRow}`}>
+              <div className={styles.label}>
+                Veo 3.1 (:08s)
+              </div>
+              <div className={`${styles.value} ${styles.highlight}`}>10 Tokens</div>
+            </div>
+          </>
         )}
 
         {type === "image" && (
